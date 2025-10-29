@@ -8,14 +8,14 @@ Vocabulary Quiz is an educational tool that helps users study word-definition pa
 
 ## Features
 
-- ðŸ“ **Custom Input Files**: Specify any text file as input (defaults to wordlist.txt)
-- ðŸ“š **Multiple Topics**: Organize words into categories
-- ðŸ”€ **Flexible Ordering**: Choose between random or sequential word order
-- ðŸŽ¯ **Dynamic Switching**: Change topics or order modes during the quiz
-- âŒ¨ï¸ **Interactive Commands**: Built-in commands for quiz control
-- ðŸ“Š **Word Count Display**: See how many words you're studying
-- ðŸ†˜ **Built-in Help**: Access command reference at any time
-- ðŸŽ¨ **Color-Coded Output**: Easy-to-read colored terminal output
+- **Custom Input Files**: Specify any text file as input (defaults to wordlist.txt)
+- **Multiple Topics**: Organize words into categories
+- **Flexible Ordering**: Choose between random or sequential word order
+- **Dynamic Switching**: Change topics or order modes during the quiz
+- **Interactive Commands**: Built-in commands for quiz control
+- **Word Count Display**: See how many words you're studying
+- **Built-in Help**: Access command reference at any time
+- **Color-Coded Output**: Easy-to-read colored terminal output
 
 ## Requirements
 
@@ -384,22 +384,22 @@ Command Line Arguments:
 
 ## Tips and Tricks
 
-### ðŸ’¡ Study Efficiently
+### Study Efficiently
 - Start with all topics in Random mode for comprehensive review
 - Switch to List mode when learning new vocabulary
 - Use multiple quiz sessions with different topic combinations
 
-### ðŸ”„ Practice Strategies
+### Practice Strategies
 1. **Review New Words**: Start with List mode to memorize definitions sequentially
 2. **Test Knowledge**: Switch to Random mode to test recall
 3. **Focus Areas**: Use the `topic` command to concentrate on weak areas
 
-### âš¡ Quick Navigation
+### Quick Navigation
 - Type command shortcuts: `r` for Random, `l` for List
 - Use multiple topics at once: `topic Animals Colors Fruits`
 - Switch back to all topics anytime: `topic All`
 
-### ðŸ“ File Organization
+### File Organization
 - Organize words by difficulty: `[Easy]`, `[Medium]`, `[Hard]`
 - Group by category: `[Verbs]`, `[Nouns]`, `[Adjectives]`
 - Mix and match topics in a single session
