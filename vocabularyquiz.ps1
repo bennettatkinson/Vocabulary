@@ -8,6 +8,7 @@ param(
     [string]$Topic = "All",  # Default to all topics, space or comma separated for multiple
     [string]$Order = "Random",  # Word order: Random or List
     [string]$File = "wordlist.txt",  # Input file with word-definition pairs
+    [switch]$Reverse,  # Reverse mode: show definition/translation, ask for word
     [switch]$Help  # Show help information
 )
 
@@ -26,6 +27,8 @@ if ($Help) {
     Write-Host "                            Random: Words shown in random order" -ForegroundColor Gray
     Write-Host "                            List: Words shown in sequential order from file" -ForegroundColor Gray
     Write-Host "                            Default: 'Random'" -ForegroundColor Gray
+    Write-Host "  -Reverse                  Enable reverse mode: show translation, ask for word" -ForegroundColor Green
+    Write-Host "                            Default: disabled (show word, ask for translation)" -ForegroundColor Gray
     Write-Host "  -Help                     Display this help information" -ForegroundColor Green
     Write-Host ""
     Write-Host "Quiz Commands (available after seeing translation):" -ForegroundColor Yellow
@@ -38,6 +41,7 @@ if ($Help) {
     Write-Host "  order list                Switch to list order" -ForegroundColor Green
     Write-Host "  refresh                   Reload the word list from file" -ForegroundColor Green
     Write-Host "  restart                   Restart the current topic" -ForegroundColor Green
+    Write-Host "  reverse                   Toggle between normal and reverse modes" -ForegroundColor Green
     Write-Host "  help                      Display this help information" -ForegroundColor Green
     Write-Host "  quit or exit              Stop the quiz" -ForegroundColor Green
     Write-Host ""
@@ -143,6 +147,9 @@ else {
     exit
 }
 
+# Set reverse display mode
+$ReverseDisplay = if ($Reverse) { "Reverse" } else { "Normal" }
+
 if ($pairs.Count -eq 0) {
     Write-Host "Error: No valid word-definition pairs found. Format should be: word: definition" -ForegroundColor Red
     exit
@@ -158,6 +165,8 @@ Write-Host "Topic: " -ForegroundColor Gray -NoNewline
 Write-Host $TopicDisplay -ForegroundColor Green
 Write-Host "Order: " -ForegroundColor Gray -NoNewline
 Write-Host $OrderDisplay -ForegroundColor Green
+Write-Host "Mode: " -ForegroundColor Gray -NoNewline
+Write-Host $ReverseDisplay -ForegroundColor Green
 Write-Host "Word Count: " -ForegroundColor Gray -NoNewline
 Write-Host $pairs.Count -ForegroundColor Green
 Write-Host "Type 'quit' or 'exit' to stop the quiz." -ForegroundColor Yellow
@@ -178,6 +187,8 @@ $headerDisplay = {
     Write-Host $TopicDisplay -ForegroundColor Green
     Write-Host "Order: " -ForegroundColor Gray -NoNewline
     Write-Host $OrderDisplay -ForegroundColor Green
+    Write-Host "Mode: " -ForegroundColor Gray -NoNewline
+    Write-Host $ReverseDisplay -ForegroundColor Green
     Write-Host "Word Count: " -ForegroundColor Gray -NoNewline
     Write-Host $pairs.Count -ForegroundColor Green
     Write-Host ""
@@ -394,6 +405,27 @@ function Restart-Topic {
     return $true
 }
 
+# Function to toggle between normal and reverse modes
+function Toggle-Reverse {
+    Write-Host ""
+    
+    if ($script:ReverseDisplay -eq "Normal") {
+        $script:ReverseDisplay = "Reverse"
+        Write-Host "Switched to mode: " -ForegroundColor Green -NoNewline
+        Write-Host "Reverse" -ForegroundColor Cyan
+        Write-Host "(Show translation, ask for word)" -ForegroundColor Gray
+    }
+    else {
+        $script:ReverseDisplay = "Normal"
+        Write-Host "Switched to mode: " -ForegroundColor Green -NoNewline
+        Write-Host "Normal" -ForegroundColor Cyan
+        Write-Host "(Show word, ask for translation)" -ForegroundColor Gray
+    }
+    
+    Write-Host ""
+    return $true
+}
+
 # Function to display help during quiz
 function Display-Help {
     Write-Host ""
@@ -412,6 +444,7 @@ function Display-Help {
     Write-Host "  order list                Switch to list order" -ForegroundColor Green
     Write-Host "  refresh                   Reload the word list from file" -ForegroundColor Green
     Write-Host "  restart                   Restart the current topic" -ForegroundColor Green
+    Write-Host "  reverse                   Toggle between normal and reverse modes" -ForegroundColor Green
     Write-Host "  help                      Display this help information" -ForegroundColor Green
     Write-Host "  quit or exit              Stop the quiz" -ForegroundColor Green
     Write-Host ""
@@ -420,6 +453,8 @@ function Display-Help {
     Write-Host $TopicDisplay -ForegroundColor Green
     Write-Host "  Order: " -ForegroundColor Gray -NoNewline
     Write-Host $OrderDisplay -ForegroundColor Green
+    Write-Host "  Mode: " -ForegroundColor Gray -NoNewline
+    Write-Host $ReverseDisplay -ForegroundColor Green
     Write-Host ""
 }
 
@@ -457,7 +492,7 @@ while ($true) {
     $response = Read-Host
     
     # Check for commands
-    while ($response -match "^topic" -or $response -match "^order" -or $response -eq "info" -or $response -eq "help" -or $response -eq "refresh" -or $response -eq "restart") {
+    while ($response -match "^topic" -or $response -match "^order" -or $response -eq "info" -or $response -eq "help" -or $response -eq "refresh" -or $response -eq "restart" -or $response -eq "reverse") {
         if ($response -eq "info") {
             & $headerDisplay
         }
@@ -469,6 +504,9 @@ while ($true) {
         }
         elseif ($response -eq "restart") {
             Restart-Topic
+        }
+        elseif ($response -eq "reverse") {
+            Toggle-Reverse
         }
         elseif ($response -match "^topic") {
             # Check if argument provided

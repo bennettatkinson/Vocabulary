@@ -12,7 +12,7 @@ echo ""
 
 # Check if running with sudo/root
 if [[ $EUID -ne 0 ]]; then
-   echo "❌ This script must be run with sudo"
+   echo "âŒ This script must be run with sudo"
    echo "Usage: sudo bash install-docs.sh"
    exit 1
 fi
@@ -29,16 +29,16 @@ TLDR_ALT_DEST="/usr/share/tldr/vocabularyquiz.txt"
 
 # Check if source files exist
 if [[ ! -f "$MAN_SOURCE" ]]; then
-    echo "❌ Error: vocabularyquiz.man not found at $MAN_SOURCE"
+    echo "âŒ Error: vocabularyquiz.man not found at $MAN_SOURCE"
     exit 1
 fi
 
 if [[ ! -f "$TLDR_SOURCE" ]]; then
-    echo "❌ Error: TLDR.txt not found at $TLDR_SOURCE"
+    echo "âŒ Error: TLDR.txt not found at $TLDR_SOURCE"
     exit 1
 fi
 
-echo "✓ Source files found"
+echo "âœ“ Source files found"
 echo ""
 
 # Install man page
@@ -46,16 +46,16 @@ echo "Installing man page..."
 mkdir -p /usr/share/man/man1
 cp "$MAN_SOURCE" "$MAN_DEST"
 chmod 644 "$MAN_DEST"
-echo "✓ Man page installed to $MAN_DEST"
+echo "âœ“ Man page installed to $MAN_DEST"
 
 # Update man database
 echo ""
 echo "Updating man database..."
 if command -v mandb &> /dev/null; then
     mandb -q 2>/dev/null || true
-    echo "✓ Man database updated"
+    echo "âœ“ Man database updated"
 else
-    echo "⚠ mandb not found, skipping database update"
+    echo "âš  mandb not found, skipping database update"
 fi
 
 # Install TLDR file
@@ -66,13 +66,13 @@ echo "Installing TLDR documentation..."
 if mkdir -p /usr/local/share/tldr 2>/dev/null; then
     cp "$TLDR_SOURCE" "$TLDR_DEST"
     chmod 644 "$TLDR_DEST"
-    echo "✓ TLDR installed to $TLDR_DEST"
+    echo "âœ“ TLDR installed to $TLDR_DEST"
 else
     # Fallback to alternative location
     mkdir -p /usr/share/tldr
     cp "$TLDR_SOURCE" "$TLDR_ALT_DEST"
     chmod 644 "$TLDR_ALT_DEST"
-    echo "✓ TLDR installed to $TLDR_ALT_DEST"
+    echo "âœ“ TLDR installed to $TLDR_ALT_DEST"
 fi
 
 echo ""
