@@ -8,6 +8,7 @@ BASIC USAGE
 .\vocabularyquiz.ps1 -Topic Animals                           # Specific topic
 .\vocabularyquiz.ps1 -Topic "Animals Colors"                  # Multiple topics
 .\vocabularyquiz.ps1 -Order List                              # Sequential order
+.\vocabularyquiz.ps1 -Reverse                                 # Enable reverse mode
 .\vocabularyquiz.ps1 -File vocab.txt -Topic Animals -Order List  # All options
 .\vocabularyquiz.ps1 -Help                                    # Show help
 
@@ -25,18 +26,21 @@ blue: color of sky
 
 QUIZ COMMANDS
 (Available ONLY after viewing translation)
-help      â†’ Show all commands and settings
-info      â†’ Show current topic/order/count
-topic     â†’ Switch topics interactively
-topic Animals           â†’ Switch to Animals topic
-topic Animals Colors    â†’ Switch to multiple topics
-order     â†’ Switch order mode interactively
-order random            â†’ Switch to random order
-order list              â†’ Switch to list order
-refresh   â†’ Reload word list from file
-restart   â†’ Restart current topic from beginning
-quit      â†’ Exit the quiz
-exit      â†’ Exit the quiz
+help      -> Show all commands and settings
+info      -> Show current topic/order/count
+topic     -> Switch topics interactively
+topic Animals           -> Switch to Animals topic
+topic Animals Colors    -> Switch to multiple topics
+order     -> Switch order mode interactively
+order random            -> Switch to random order
+order list              -> Switch to list order
+refresh   -> Reload from file and restart
+restart   -> Restart topic (same as refresh)
+reverse   -> Toggle Normal/Reverse modes
+hide      -> Hide current word (won't appear again)
+unhide    -> Show all hidden words
+quit      -> Exit the quiz
+exit      -> Exit the quiz
 
 
 QUICK EXAMPLES
@@ -50,18 +54,27 @@ Use custom file with Animals topic:
 Use custom file with multiple topics in list order:
   .\vocabularyquiz.ps1 -File vocab.txt -Topic "Animals Colors" -Order List
 
+Start in reverse mode (show definition, guess the word):
+  .\vocabularyquiz.ps1 -Reverse
+
 During quiz, type 'help' for command reference
 
 Type 'topic Colors' to switch to Colors topic mid-quiz
 
+Type 'hide' to hide a word you know well
+
+Type 'reverse' to toggle between normal and reverse modes
+
 
 KEY FEATURES
 ------------
-âœ“ Custom input files via -File parameter
-âœ“ Defaults to wordlist.txt if not specified
-âœ“ Multiple topics in one file
-âœ“ Switch topics/order anytime during quiz
-âœ“ Random or sequential word order
-âœ“ Case-insensitive commands
-âœ“ Word count display
-âœ“ Interactive help built-in
+Custom input files via -File parameter
+Defaults to wordlist.txt if not specified
+Multiple topics in one file
+Switch topics/order anytime during quiz
+Random or sequential word order
+Normal and Reverse study modes
+Hide words you've mastered
+Case-insensitive commands
+Word count display
+Interactive help built-in

@@ -222,29 +222,69 @@ help
 ```
 
 ### `refresh`
-Reloads the word list from the file. This is useful if you have edited the word list file while the quiz is running. The current topic and word order settings are maintained after refresh.
+Reloads the word list from the file and restarts from the beginning. This is useful if you have edited the word list file while the quiz is running. The current topic and word order settings are maintained. In Random mode, words are reshuffled.
 
 **Usage:**
 ```
 Translation: a four-legged domestic animal
 Press Enter for the next word or enter a command...
 refresh
-Word list refreshed successfully
-Word Count: 45
+Topic restarted and word list refreshed
+Topic: Animals
+Order: Random
+Word Count: 15
 ```
 
 ### `restart`
-Restarts the current topic from the beginning. If in Random mode, the words are reshuffled. If in List mode, the quiz starts from the first word again.
+Restarts the current topic from the beginning and reloads from file. If in Random mode, the words are reshuffled. If in List mode, the quiz starts from the first word again. Works identically to the `refresh` command.
 
 **Usage:**
 ```
 Translation: a four-legged domestic animal
 Press Enter for the next word or enter a command...
 restart
-Topic restarted
+Topic restarted and word list refreshed
 Topic: Animals
 Order: Random
 Word Count: 15
+```
+
+### `reverse`
+Toggles between Normal and Reverse modes during the quiz:
+- **Normal Mode**: Shows the word, you recall the definition
+- **Reverse Mode**: Shows the definition, you recall the word
+
+**Usage:**
+```
+Translation: a four-legged domestic animal
+Press Enter for the next word or enter a command...
+reverse
+Switched to mode: Reverse
+(Show translation, ask for word)
+```
+
+### `hide`
+Hides the current word so it won't appear again in the quiz. Hidden words are excluded from both Random and List modes.
+
+**Usage:**
+```
+Translation: a four-legged domestic animal
+Press Enter for the next word or enter a command...
+hide
+Hidden: dog
+Hidden words: 1
+```
+
+### `unhide`
+Shows all previously hidden words again. All words become visible and can appear in the quiz once more.
+
+**Usage:**
+```
+Translation: a four-legged domestic animal
+Press Enter for the next word or enter a command...
+unhide
+Unhidden 3 word(s)
+All words are now visible.
 ```
 
 ### `quit` or `exit`
@@ -391,16 +431,21 @@ Command Line Arguments:
 
 ## Command Reference Table
 
-| Command | Mode | Function | Example |
-|---------|------|----------|---------|
-| `info` | Any prompt | Show quiz header | `info` |
-| `topic` | Any prompt | Switch topics (interactive) | `topic` |
-| `topic X` | Any prompt | Switch to topic X | `topic Animals` |
-| `order` | Any prompt | Switch order (interactive) | `order` |
-| `order random` | Any prompt | Switch to random order | `order random` |
-| `order list` | Any prompt | Switch to list order | `order list` |
-| `help` | Any prompt | Show command help | `help` |
-| `quit` \| `exit` | Any prompt | Exit quiz | `quit` |
+| Command | Function | Example |
+|---------|----------|---------|
+| `info` | Show quiz header | `info` |
+| `topic` | Switch topics (interactive) | `topic` |
+| `topic X` | Switch to topic X | `topic Animals` |
+| `order` | Switch order (interactive) | `order` |
+| `order random` | Switch to random order | `order random` |
+| `order list` | Switch to list order | `order list` |
+| `refresh` | Reload from file and restart | `refresh` |
+| `restart` | Restart topic (same as refresh) | `restart` |
+| `reverse` | Toggle Normal/Reverse modes | `reverse` |
+| `hide` | Hide current word | `hide` |
+| `unhide` | Show all hidden words | `unhide` |
+| `help` | Show command help | `help` |
+| `quit` \| `exit` | Exit quiz | `quit` |
 
 ## Performance Notes
 

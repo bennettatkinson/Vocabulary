@@ -12,6 +12,9 @@ param(
     [switch]$Help  # Show help information
 )
 
+# Initialize array to track hidden words
+$hiddenWords = @()
+
 # Display help if requested
 if ($Help) {
     Write-Host "Vocabulary Quiz - Help" -ForegroundColor Cyan
@@ -32,6 +35,7 @@ if ($Help) {
     Write-Host "  -Help                     Display this help information" -ForegroundColor Green
     Write-Host ""
     Write-Host "Quiz Commands (available after seeing translation):" -ForegroundColor Yellow
+    Write-Host "  hide                      Hide the current word (won't be shown again)" -ForegroundColor Green
     Write-Host "  info                      Display the quiz header with current settings" -ForegroundColor Green
     Write-Host "  topic                     Switch topics interactively" -ForegroundColor Green
     Write-Host "  topic <TopicName>         Switch to specific topic(s)" -ForegroundColor Green
@@ -306,7 +310,13 @@ function Switch-Order {
 }
 
 # Function to refresh/reload the word list from file
+# Now calls Restart-Topic to avoid code duplication
 function Refresh-WordList {
+    Restart-Topic
+}
+
+# Function to restart the current topic (also refreshes from file)
+function Restart-Topic {
     Write-Host ""
     
     # Check if file exists
@@ -374,27 +384,7 @@ function Refresh-WordList {
         $script:pairs = $script:pairs | Sort-Object {Get-Random}
     }
     
-    Write-Host "Word list refreshed successfully" -ForegroundColor Green
-    Write-Host "Word Count: " -ForegroundColor Gray -NoNewline
-    Write-Host $script:pairs.Count -ForegroundColor Green
-    Write-Host ""
-    $script:pairIndex = 0  # Reset pair index
-    return $true
-}
-
-# Function to restart the current topic
-function Restart-Topic {
-    Write-Host ""
-    
-    # Reshuffle if in random mode
-    if ($OrderDisplay -eq "Random") {
-        $script:pairs = $script:pairs | Sort-Object {Get-Random}
-    }
-    
-    # Reset pair index
-    $script:pairIndex = 0
-    
-    Write-Host "Topic restarted" -ForegroundColor Green
+    Write-Host "Topic restarted and word list refreshed" -ForegroundColor Green
     Write-Host "Topic: " -ForegroundColor Gray -NoNewline
     Write-Host $TopicDisplay -ForegroundColor Green
     Write-Host "Order: " -ForegroundColor Gray -NoNewline
@@ -402,6 +392,7 @@ function Restart-Topic {
     Write-Host "Word Count: " -ForegroundColor Gray -NoNewline
     Write-Host $script:pairs.Count -ForegroundColor Green
     Write-Host ""
+    $script:pairIndex = 0  # Reset pair index
     return $true
 }
 
@@ -420,6 +411,55 @@ function Toggle-Reverse {
         Write-Host "Switched to mode: " -ForegroundColor Green -NoNewline
         Write-Host "Normal" -ForegroundColor Cyan
         Write-Host "(Show word, ask for translation)" -ForegroundColor Gray
+    }
+    
+    Write-Host ""
+    return $true
+}
+
+# Function to hide the current word
+function Hide-Word {
+    param(
+        [object]$Word
+    )
+    
+    if ($null -eq $Word -or [string]::IsNullOrWhiteSpace($Word.Word)) {
+        Write-Host ""
+        Write-Host "Error: No word to hide." -ForegroundColor Red
+        return $false
+    }
+    
+    Write-Host ""
+    
+    # Add to hidden words if not already there
+    if ($script:hiddenWords -notcontains $Word.Word) {
+        $script:hiddenWords += $Word.Word
+        Write-Host "Hidden: " -ForegroundColor Green -NoNewline
+        Write-Host $Word.Word -ForegroundColor Cyan
+        Write-Host "Hidden words: " -ForegroundColor Gray -NoNewline
+        Write-Host $script:hiddenWords.Count -ForegroundColor Yellow
+    }
+    else {
+        Write-Host "Word already hidden: " -ForegroundColor Yellow -NoNewline
+        Write-Host $Word.Word -ForegroundColor Cyan
+    }
+    
+    Write-Host ""
+    return $true
+}
+
+# Function to unhide all words
+function Unhide-Words {
+    Write-Host ""
+    
+    if ($script:hiddenWords.Count -eq 0) {
+        Write-Host "No hidden words to show." -ForegroundColor Yellow
+    }
+    else {
+        $count = $script:hiddenWords.Count
+        $script:hiddenWords = @()
+        Write-Host "Unhidden $count word(s)" -ForegroundColor Green
+        Write-Host "All words are now visible." -ForegroundColor Green
     }
     
     Write-Host ""
@@ -445,6 +485,8 @@ function Display-Help {
     Write-Host "  refresh                   Reload the word list from file" -ForegroundColor Green
     Write-Host "  restart                   Restart the current topic" -ForegroundColor Green
     Write-Host "  reverse                   Toggle between normal and reverse modes" -ForegroundColor Green
+    Write-Host "  hide                      Hide the current word (won't appear again)" -ForegroundColor Green
+    Write-Host "  unhide                    Show all hidden words again" -ForegroundColor Green
     Write-Host "  help                      Display this help information" -ForegroundColor Green
     Write-Host "  quit or exit              Stop the quiz" -ForegroundColor Green
     Write-Host ""
@@ -463,36 +505,83 @@ $pairIndex = 0
 
 # Main quiz loop
 while ($true) {
+    # Filter out hidden words
+    $visiblePairs = $pairs | Where-Object { $hiddenWords -notcontains $_.Word }
+    
+    # Check if there are any visible words left
+    if ($visiblePairs.Count -eq 0) {
+        Write-Host ""
+        Write-Host "All words are hidden! Use the 'unhide' command to show them again." -ForegroundColor Yellow
+        Write-Host "Press Enter for the next word or enter a command..." -ForegroundColor Gray -NoNewline
+        $response = Read-Host
+        
+        if ($response -eq "unhide") {
+            Unhide-Words
+            continue
+        }
+        elseif ($response -eq "quit" -or $response -eq "exit") {
+            Write-Host "Thanks for studying!" -ForegroundColor Cyan
+            break
+        }
+        else {
+            continue
+        }
+    }
+    
     # Pick a pair based on order mode
     if ($OrderDisplay -eq "Random") {
-        $randomPair = $pairs | Get-Random
+        $randomPair = $visiblePairs | Get-Random
     }
     else {
-        # List mode - cycle through pairs
-        $randomPair = $pairs[$pairIndex]
-        $pairIndex = ($pairIndex + 1) % $pairs.Count
+        # List mode - cycle through visible pairs
+        if ($pairIndex -ge $visiblePairs.Count) {
+            $pairIndex = 0
+        }
+        $randomPair = $visiblePairs[$pairIndex]
+        $pairIndex = ($pairIndex + 1)
     }
     
-    # Display the word
-    Write-Host "Word: " -ForegroundColor Cyan -NoNewline
-    Write-Host $randomPair.Word -ForegroundColor Green -BackgroundColor Black -NoNewline
-    Write-Host " - Press Enter to see the translation..." -ForegroundColor Gray -NoNewline
+    # Display based on reverse mode
+    if ($ReverseDisplay -eq "Normal") {
+        # Normal mode: Show word first, then definition
+        Write-Host "Word: " -ForegroundColor Cyan -NoNewline
+        Write-Host $randomPair.Word -ForegroundColor Green -BackgroundColor Black -NoNewline
+        Write-Host " - Press Enter to see the translation..." -ForegroundColor Gray -NoNewline
+        
+        # Wait for Enter key only - ignore any other input
+        do {
+            $key = $host.UI.RawUI.ReadKey("NoEcho")
+        } while ($key.VirtualKeyCode -ne 13)  # 13 is the Enter/Return key
+        
+        Write-Host ""  # New line after key press
+        
+        # Display the translation/definition
+        Write-Host "Translation: " -ForegroundColor Cyan -NoNewline
+        Write-Host $randomPair.Definition -ForegroundColor Yellow
+    }
+    else {
+        # Reverse mode: Show definition first, then word
+        Write-Host "Definition: " -ForegroundColor Cyan -NoNewline
+        Write-Host $randomPair.Definition -ForegroundColor Yellow -NoNewline
+        Write-Host " - Press Enter to see the word..." -ForegroundColor Gray -NoNewline
+        
+        # Wait for Enter key only - ignore any other input
+        do {
+            $key = $host.UI.RawUI.ReadKey("NoEcho")
+        } while ($key.VirtualKeyCode -ne 13)  # 13 is the Enter/Return key
+        
+        Write-Host ""  # New line after key press
+        
+        # Display the word
+        Write-Host "Word: " -ForegroundColor Cyan -NoNewline
+        Write-Host $randomPair.Word -ForegroundColor Green -BackgroundColor Black
+    }
     
-    # Wait for Enter key only - ignore any other input
-    do {
-        $key = $host.UI.RawUI.ReadKey("NoEcho")
-    } while ($key.VirtualKeyCode -ne 13)  # 13 is the Enter/Return key
-    
-    Write-Host ""  # New line after key press
-    
-    # Display the translation/definition
-    Write-Host "Translation: " -ForegroundColor Cyan -NoNewline
-    Write-Host $randomPair.Definition -ForegroundColor Yellow
     Write-Host "Press Enter for the next word or enter a command..." -ForegroundColor Gray -NoNewline
     $response = Read-Host
     
     # Check for commands
-    while ($response -match "^topic" -or $response -match "^order" -or $response -eq "info" -or $response -eq "help" -or $response -eq "refresh" -or $response -eq "restart" -or $response -eq "reverse") {
+    while ($response -match "^topic" -or $response -match "^order" -or $response -eq "info" -or $response -eq "help" -or $response -eq "refresh" -or $response -eq "restart" -or $response -eq "reverse" -or $response -eq "hide" -or $response -eq "unhide") {
         if ($response -eq "info") {
             & $headerDisplay
         }
@@ -507,6 +596,12 @@ while ($true) {
         }
         elseif ($response -eq "reverse") {
             Toggle-Reverse
+        }
+        elseif ($response -eq "hide") {
+            Hide-Word -Word $randomPair
+        }
+        elseif ($response -eq "unhide") {
+            Unhide-Words
         }
         elseif ($response -match "^topic") {
             # Check if argument provided

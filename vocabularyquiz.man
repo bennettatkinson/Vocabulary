@@ -2,14 +2,15 @@ NAME
     vocabularyquiz - A PowerShell script for interactive vocabulary study
 
 SYNOPSIS
-    .\vocabularyquiz.ps1 [[-File] <string>] [[-Topic] <string>] [[-Order] <string>] [-Help]
+    .\vocabularyquiz.ps1 [[-File] <string>] [[-Topic] <string>] [[-Order] <string>] [-Reverse] [-Help]
 
 DESCRIPTION
     vocabularyquiz is an interactive PowerShell script that helps users study word-definition
     pairs from a text file. Words can be organized into topics, displayed in random or 
     sequential order, and the quiz supports interactive commands to switch topics and order 
-    modes. The input file location can be specified, defaulting to "wordlist.txt" in the current 
-    directory.
+    modes. The script also supports Normal and Reverse study modes, plus the ability to hide
+    words you've mastered. The input file location can be specified, defaulting to 
+    "wordlist.txt" in the current directory.
 
 PARAMETERS
     -File <string>
@@ -45,6 +46,14 @@ PARAMETERS
         Examples:
             -Order Random
             -Order List
+
+    -Reverse
+        Enables Reverse mode: shows the definition/translation first and asks you to recall the word.
+        
+        Default: disabled (Normal mode shows word first)
+        
+        Examples:
+            -Reverse
 
     -Help
         Displays comprehensive help information including command line arguments, quiz commands,
@@ -93,12 +102,27 @@ INTERACTIVE COMMANDS
         Supports shortcuts: 'r' for Random, 'l' for List
     
     refresh
-        Reloads the word list from the file. Useful if you have edited the word list file.
-        Maintains current topic and order settings.
+        Reloads the word list from the file and restarts from the beginning. Useful if you have 
+        edited the word list file. In Random mode, words are reshuffled. In List mode, starts from 
+        the first word again. Works identically to the restart command.
     
     restart
-        Restarts the current topic from the beginning. If in Random mode, the words are
-        reshuffled. If in List mode, starts from the first word again.
+        Restarts the current topic from the beginning and reloads from file. If in Random mode, 
+        the words are reshuffled. If in List mode, starts from the first word again. Works 
+        identically to the refresh command.
+    
+    reverse
+        Toggles between Normal and Reverse modes during the quiz. In Normal mode, the word is 
+        shown and you recall the definition. In Reverse mode, the definition is shown and you 
+        recall the word.
+    
+    hide
+        Hides the current word so it won't appear again in the quiz. Hidden words are excluded 
+        from both Random and List modes and tracked during the session.
+    
+    unhide
+        Shows all previously hidden words again. All words become visible and can appear in the 
+        quiz once more.
     
     help
         Displays command reference and current quiz settings.
@@ -122,17 +146,24 @@ EXAMPLES
     5. Study Animals and Colors topics from custom file:
            .\vocabularyquiz.ps1 -File mywords.txt -Topic "Animals,Colors"
     
-    6. Display help information:
+    6. Start in Reverse mode (show definition, guess the word):
+           .\vocabularyquiz.ps1 -Reverse
+    
+    7. Study with custom file, multiple topics, and reverse mode:
+           .\vocabularyquiz.ps1 -File vocabulary.txt -Topic "Verbs Nouns" -Reverse
+    
+    8. Display help information:
            .\vocabularyquiz.ps1 -Help
     
-    7. Start with specific file and switch to different topic during quiz:
+    9. Start with specific file and use hide command during quiz:
            .\vocabularyquiz.ps1 -File spanish.txt -Topic Animals
-           > topic Colors
+           > hide
+           > unhide
 
 REQUIREMENTS
     - PowerShell 3.0 or later
-    - A file named "woord.txt" in the current directory
-    - Read access to woord.txt
+    - A file named "wordlist.txt" in the current directory (or custom file via -File parameter)
+    - Read access to the word list file
 
 WORKFLOW
     1. Script loads and parses the input file
