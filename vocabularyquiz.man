@@ -92,6 +92,14 @@ INTERACTIVE COMMANDS
         Switches directly to the specified order (Random or List).
         Supports shortcuts: 'r' for Random, 'l' for List
     
+    refresh
+        Reloads the word list from the file. Useful if you have edited the word list file.
+        Maintains current topic and order settings.
+    
+    restart
+        Restarts the current topic from the beginning. If in Random mode, the words are
+        reshuffled. If in List mode, starts from the first word again.
+    
     help
         Displays command reference and current quiz settings.
     

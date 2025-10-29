@@ -62,4 +62,182 @@ peettante: godmother
 ziekenhuis: hospital
 
 [meals]
-maaltijd: meal
+maaltijd : meal
+ontbijt : breakfast
+lunch : lunch
+diner : dinner
+avondeten : dinner/supper
+brunch : brunch
+snack : snack
+tussendoortje : snack
+hapje : bite/snack
+voorgerechtje : appetizer
+voorgerecht : appetizer
+hoofdgerecht : main course
+nagerecht : dessert
+toetje : dessert
+dessert : dessert
+soep : soup
+salade : salad
+vlees : meat
+kip : chicken
+rund : beef
+varkensvlees : pork
+lam : lamb
+vis : fish
+zeevruchten : seafood
+groenten : vegetables
+fruit : fruit
+brood : bread
+broodje : sandwich/bread roll
+boterham : slice of bread/sandwich
+kaas : cheese
+melk : milk
+boter : butter
+jam : jam
+honing : honey
+eieren : eggs
+rijst : rice
+pasta : pasta
+aardappels : potatoes
+bonen : beans
+wortels : carrots
+ui : onion
+tomaat : tomato
+komkommer : cucumber
+paprika : bell pepper
+sla : lettuce
+koolraap : cabbage
+appel : apple
+sinaasappel : orange
+banaan : banana
+aardbeien : strawberries
+chocolade : chocolate
+koekje : cookie
+taart : cake
+pastei : pie
+drank : drink
+water : water
+bier : beer
+wijn : wine
+koffie : coffee
+thee : tea
+sap : juice
+limonade : lemonade
+melk : milk
+eten : to eat
+drinken : to drink
+serveren : to serve
+bereiden : to prepare
+koken : to cook
+bakken : to bake/fry
+grillen : to grill
+stoven : to stew
+garen : to cook
+proeven : to taste
+zuigen : to sip
+hap : bite
+slok : sip
+bord : plate
+kom : bowl
+glas : glass
+beker : cup
+mok : mug
+kan : pitcher
+schaal : platter
+schaal : bowl
+mes : knife
+vork : fork
+lepel : spoon
+eetlepel : tablespoon
+theelepel : teaspoon
+servies : dishes
+tafellaken : tablecloth
+servette : napkin
+tafel : table
+stoel : chair
+keuken : kitchen
+fornuis : stove
+oven : oven
+koelkast : refrigerator
+vaatwasser : dishwasher
+gootsteen : sink
+aanrecht : counter
+keukenkast : kitchen cabinet
+receptuur : recipe
+ingredient : ingredient
+kruid : spice
+zout : salt
+peper : pepper
+olie : oil
+azijn : vinegar
+suiker : sugar
+meel : flour
+gist : yeast
+bakpoeder : baking powder
+karamel : caramel
+saus : sauce
+stroop : syrup
+jus : gravy
+bouillon : broth
+verzadigd : satisfied
+hongerig : hungry
+dorst : thirsty
+lekker : delicious
+smakelijk : tasty
+vies : disgusting
+vers : fresh
+bedorven : spoiled
+heet : hot
+koud : cold
+warm : warm
+maaltijdtijd : meal time
+eettijd : dinner time
+slurpen : to slurp
+kauwen : to chew
+slikken : to swallow
+braken : to vomit
+buikpijn : stomach ache
+menu : menu
+gerecht : dish
+bereiding : preparation
+garnituur : side dish
+bijgerecht : side dish
+kerrie : curry
+pindakaas : peanut butter
+confituur : jam
+vleessaus : gravy
+slagroom : whipped cream
+roomkaas : cream cheese
+yoghurt : yogurt
+pudding : pudding
+vla : custard
+ijs : ice cream
+sorbet : sorbet
+roomijs : ice cream
+frisdrank : soft drink
+alcoholisch drinken : alcoholic beverage
+maaltijdtafel : dinner table
+bestek : cutlery
+servies : dishes/tableware
+drinkglas : drinking glass
+wijnglas : wine glass
+bierglas : beer glass
+koffiebeker : coffee mug
+theekopje : teacup
+ontbijttafel : breakfast table
+dieet : diet
+vetarm : low-fat
+suikervrij : sugar-free
+biologisch : organic
+vegetarisch : vegetarian
+veganistisch : vegan
+glutenvrij : gluten-free
+lactosevrij : lactose-free
+pikant : spicy
+mild : mild
+zoet : sweet
+zout : salty
+zuur : sour
+bitter : bitter
+smaakvol : flavorful

@@ -33,6 +33,8 @@ topic Animals Colors    → Switch to multiple topics
 order     → Switch order mode interactively
 order random            → Switch to random order
 order list              → Switch to list order
+refresh   → Reload word list from file
+restart   → Restart current topic from beginning
 quit      → Exit the quiz
 exit      → Exit the quiz
 

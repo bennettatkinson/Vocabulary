@@ -36,6 +36,8 @@ if ($Help) {
     Write-Host "  order                     Switch word order interactively (Random/List)" -ForegroundColor Green
     Write-Host "  order random              Switch to random order" -ForegroundColor Green
     Write-Host "  order list                Switch to list order" -ForegroundColor Green
+    Write-Host "  refresh                   Reload the word list from file" -ForegroundColor Green
+    Write-Host "  restart                   Restart the current topic" -ForegroundColor Green
     Write-Host "  help                      Display this help information" -ForegroundColor Green
     Write-Host "  quit or exit              Stop the quiz" -ForegroundColor Green
     Write-Host ""
@@ -292,6 +294,106 @@ function Switch-Order {
     return $true
 }
 
+# Function to refresh/reload the word list from file
+function Refresh-WordList {
+    Write-Host ""
+    
+    # Check if file exists
+    if (-not (Test-Path $File)) {
+        Write-Host "Error: File '$File' not found." -ForegroundColor Red
+        return $false
+    }
+    
+    # Read all lines from the file
+    $lines = @(Get-Content $File | Where-Object {$_.Trim() -ne ""})
+    
+    # Check if file has content
+    if ($lines.Count -eq 0) {
+        Write-Host "Error: File is empty." -ForegroundColor Red
+        return $false
+    }
+    
+    # Parse word-definition pairs with topics
+    $script:allPairs = @()
+    $currentTopic = "General"
+    $script:topics = @{}
+    
+    foreach ($line in $lines) {
+        # Check if line is a topic header [topic]
+        if ($line -match "^\s*\[(.+)\]\s*$") {
+            $currentTopic = $matches[1]
+            $script:topics[$currentTopic] = @()
+        }
+        elseif ($line -like "*:*") {
+            $parts = $line -split ":", 2  # Split on first colon only
+            $word = $parts[0].Trim()
+            $definition = $parts[1].Trim()
+            $pair = @{Word = $word; Definition = $definition; Topic = $currentTopic}
+            $script:allPairs += $pair
+            
+            if (-not $script:topics.ContainsKey($currentTopic)) {
+                $script:topics[$currentTopic] = @()
+            }
+            $script:topics[$currentTopic] += $pair
+        }
+    }
+    
+    # Reapply current topic filter
+    $script:pairs = @()
+    
+    if ($TopicDisplay -eq "All") {
+        $script:pairs = $script:allPairs
+    }
+    else {
+        # Split current topics
+        $topicNames = $TopicDisplay -split "," | ForEach-Object {$_.Trim()}
+        
+        foreach ($topicName in $topicNames) {
+            # Case-insensitive topic matching
+            $matchedTopic = $script:topics.Keys | Where-Object {$_.ToLower() -eq $topicName.ToLower()}
+            
+            if ($null -ne $matchedTopic) {
+                $script:pairs += $script:topics[$matchedTopic]
+            }
+        }
+    }
+    
+    # Reapply current order setting
+    if ($OrderDisplay -eq "Random") {
+        $script:pairs = $script:pairs | Sort-Object {Get-Random}
+    }
+    
+    Write-Host "Word list refreshed successfully" -ForegroundColor Green
+    Write-Host "Word Count: " -ForegroundColor Gray -NoNewline
+    Write-Host $script:pairs.Count -ForegroundColor Green
+    Write-Host ""
+    $script:pairIndex = 0  # Reset pair index
+    return $true
+}
+
+# Function to restart the current topic
+function Restart-Topic {
+    Write-Host ""
+    
+    # Reshuffle if in random mode
+    if ($OrderDisplay -eq "Random") {
+        $script:pairs = $script:pairs | Sort-Object {Get-Random}
+    }
+    
+    # Reset pair index
+    $script:pairIndex = 0
+    
+    Write-Host "Topic restarted" -ForegroundColor Green
+    Write-Host "Topic: " -ForegroundColor Gray -NoNewline
+    Write-Host $TopicDisplay -ForegroundColor Green
+    Write-Host "Order: " -ForegroundColor Gray -NoNewline
+    Write-Host $OrderDisplay -ForegroundColor Green
+    Write-Host "Word Count: " -ForegroundColor Gray -NoNewline
+    Write-Host $script:pairs.Count -ForegroundColor Green
+    Write-Host ""
+    return $true
+}
+
 # Function to display help during quiz
 function Display-Help {
     Write-Host ""
@@ -308,6 +410,8 @@ function Display-Help {
     Write-Host "  order                     Switch word order interactively (Random/List)" -ForegroundColor Green
     Write-Host "  order random              Switch to random order" -ForegroundColor Green
     Write-Host "  order list                Switch to list order" -ForegroundColor Green
+    Write-Host "  refresh                   Reload the word list from file" -ForegroundColor Green
+    Write-Host "  restart                   Restart the current topic" -ForegroundColor Green
     Write-Host "  help                      Display this help information" -ForegroundColor Green
     Write-Host "  quit or exit              Stop the quiz" -ForegroundColor Green
     Write-Host ""
@@ -338,7 +442,13 @@ while ($true) {
     Write-Host "Word: " -ForegroundColor Cyan -NoNewline
     Write-Host $randomPair.Word -ForegroundColor Green -BackgroundColor Black -NoNewline
     Write-Host " - Press Enter to see the translation..." -ForegroundColor Gray -NoNewline
-    $response = Read-Host
+    
+    # Wait for Enter key only - ignore any other input
+    do {
+        $key = $host.UI.RawUI.ReadKey("NoEcho")
+    } while ($key.VirtualKeyCode -ne 13)  # 13 is the Enter/Return key
+    
+    Write-Host ""  # New line after key press
     
     # Display the translation/definition
     Write-Host "Translation: " -ForegroundColor Cyan -NoNewline
@@ -347,12 +457,18 @@ while ($true) {
     $response = Read-Host
     
     # Check for commands
-    while ($response -match "^topic" -or $response -match "^order" -or $response -eq "info" -or $response -eq "help") {
+    while ($response -match "^topic" -or $response -match "^order" -or $response -eq "info" -or $response -eq "help" -or $response -eq "refresh" -or $response -eq "restart") {
         if ($response -eq "info") {
             & $headerDisplay
         }
         elseif ($response -eq "help") {
             Display-Help
+        }
+        elseif ($response -eq "refresh") {
+            Refresh-WordList
+        }
+        elseif ($response -eq "restart") {
+            Restart-Topic
         }
         elseif ($response -match "^topic") {
             # Check if argument provided
