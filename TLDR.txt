@@ -1,0 +1,65 @@
+TLDR - Vocabulary Quiz Quick Reference
+=======================================
+
+BASIC USAGE
+-----------
+.\vocabularyquiz.ps1                                          # All topics, random order, wordlist.txt
+.\vocabularyquiz.ps1 -File spanish.txt                        # Use custom file
+.\vocabularyquiz.ps1 -Topic Animals                           # Specific topic
+.\vocabularyquiz.ps1 -Topic "Animals Colors"                  # Multiple topics
+.\vocabularyquiz.ps1 -Order List                              # Sequential order
+.\vocabularyquiz.ps1 -File vocab.txt -Topic Animals -Order List  # All options
+.\vocabularyquiz.ps1 -Help                                    # Show help
+
+
+SETUP FILE FORMAT (wordlist.txt or custom file)
+-----------------------------------------------
+[Animals]
+dog: a four-legged pet
+cat: feline animal
+
+[Colors]
+red: color of fire
+blue: color of sky
+
+
+QUIZ COMMANDS
+(Available ONLY after viewing translation)
+help      → Show all commands and settings
+info      → Show current topic/order/count
+topic     → Switch topics interactively
+topic Animals           → Switch to Animals topic
+topic Animals Colors    → Switch to multiple topics
+order     → Switch order mode interactively
+order random            → Switch to random order
+order list              → Switch to list order
+quit      → Exit the quiz
+exit      → Exit the quiz
+
+
+QUICK EXAMPLES
+--------------
+Start with default wordlist.txt file:
+  .\vocabularyquiz.ps1
+
+Use custom file with Animals topic:
+  .\vocabularyquiz.ps1 -File spanish.txt -Topic Animals
+
+Use custom file with multiple topics in list order:
+  .\vocabularyquiz.ps1 -File vocab.txt -Topic "Animals Colors" -Order List
+
+During quiz, type 'help' for command reference
+
+Type 'topic Colors' to switch to Colors topic mid-quiz
+
+
+KEY FEATURES
+------------
+✓ Custom input files via -File parameter
+✓ Defaults to wordlist.txt if not specified
+✓ Multiple topics in one file
+✓ Switch topics/order anytime during quiz
+✓ Random or sequential word order
+✓ Case-insensitive commands
+✓ Word count display
+✓ Interactive help built-in

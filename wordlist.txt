@@ -1,0 +1,65 @@
+[family]
+vader: father
+moeder: mother
+zoon: son
+dochter: daughter
+broer: brother
+zus: sister
+ouders: parents
+kinderen: children
+baby: baby
+zuigeling: infant
+grootvader: grandfather
+grootmoeder: grandmother
+opa: grandpa
+oma: grandma
+kleinkind: grandchild
+kleinzoon: grandson
+kleindochter: granddaughter
+oudere broer: older brother
+jongere broer: younger brother
+oudere zus: older sister
+jongere zus: younger sister
+oom: uncle
+tante: aunt
+neef: nephew/cousin (male)
+nicht: niece/cousin (female)
+nichtje: niece (informal)
+neefje: nephew (informal)
+schoonvader: father-in-law
+schoonmoeder: mother-in-law
+schoonzoon: son-in-law
+schoondochter: daughter-in-law
+schoonbroer: brother-in-law
+schoonzus: sister-in-law
+man: husband
+vrouw: wife
+echtgenoot: spouse (male)
+echtgenote: spouse (female)
+partner: partner
+vriend: boyfriend
+vriendin: girlfriend
+familielid: family member
+familie: family
+verwant: relative
+voorouder: ancestor
+nakomelingen: descendants
+neventak: collateral branch
+tweelingbroer: twin brother
+tweetlingzus: twin sister
+stiefvader: stepfather
+stiefmoeder: stepmother
+stiefsoon: stepson
+stiefdochter: stepdaughter
+halfbroer: half-brother
+halfzus: half-sister
+adoptiekind: adopted child
+petekind: godchild
+peetvader: godfather
+peettante: godmother
+
+[places]
+ziekenhuis: hospital
+
+[meals]
+maaltijd: meal

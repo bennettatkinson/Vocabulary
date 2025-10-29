@@ -1,0 +1,158 @@
+NAME
+    vocabularyquiz - A PowerShell script for interactive vocabulary study
+
+SYNOPSIS
+    .\vocabularyquiz.ps1 [[-File] <string>] [[-Topic] <string>] [[-Order] <string>] [-Help]
+
+DESCRIPTION
+    vocabularyquiz is an interactive PowerShell script that helps users study word-definition
+    pairs from a text file. Words can be organized into topics, displayed in random or 
+    sequential order, and the quiz supports interactive commands to switch topics and order 
+    modes. The input file location can be specified, defaulting to "wordlist.txt" in the current 
+    directory.
+
+PARAMETERS
+    -File <string>
+        Specifies the path to the input file containing word-definition pairs.
+        
+        Default: "wordlist.txt"
+        
+        Examples:
+            -File wordlist.txt
+            -File vocabulary.txt
+            -File C:\vocab\spanish.txt
+
+    -Topic <string>
+        Specifies which topic(s) to study. Multiple topics can be selected by separating them
+        with spaces or commas.
+        
+        Default: "All" (all topics)
+        
+        Examples:
+            -Topic Animals
+            -Topic "Animals Colors"
+            -Topic "Animals,Colors,Fruits"
+
+    -Order <string>
+        Specifies the order in which words are presented.
+        
+        Valid values:
+            Random - Words are shown in random order (default)
+            List   - Words are shown in sequential order from the file
+        
+        Default: "Random"
+        
+        Examples:
+            -Order Random
+            -Order List
+
+    -Help
+        Displays comprehensive help information including command line arguments, quiz commands,
+        and usage examples. The script exits after displaying help.
+
+INPUT FILE FORMAT
+    The script reads from a file specified by the -File parameter (default: "wordlist.txt").
+    The file format is:
+    
+        [TopicName]
+        word1: definition1
+        word2: definition2
+        
+        [AnotherTopic]
+        word3: definition3
+        word4: definition4
+    
+    Rules:
+    - Topic headers must be enclosed in square brackets: [TopicName]
+    - Each word-definition pair must be on a single line
+    - Word and definition must be separated by a colon (:)
+    - Empty lines are ignored
+    - Multiple topics can be defined in a single file
+
+INTERACTIVE COMMANDS
+    Commands are only available after the translation is displayed. When the script shows
+    "Press Enter to see the translation...", only Enter key press is accepted. After viewing
+    the translation and seeing "Press Enter for the next word or enter a command...", the following commands
+    can be entered:
+    
+    info
+        Displays the quiz header showing current topic, word order, and word count.
+    
+    topic
+        Prompts for interactive topic selection. Enter topic name(s) separated by spaces.
+    
+    topic <TopicName>
+        Switches directly to the specified topic. Multiple topics can be selected.
+        Examples: topic Animals, topic Animals Colors
+    
+    order
+        Prompts for interactive order selection between Random and List modes.
+    
+    order <OrderType>
+        Switches directly to the specified order (Random or List).
+        Supports shortcuts: 'r' for Random, 'l' for List
+    
+    help
+        Displays command reference and current quiz settings.
+    
+    quit | exit
+        Stops the quiz and exits the script.
+
+EXAMPLES
+    1. Start with default file and all topics in random order:
+           .\vocabularyquiz.ps1
+    
+    2. Study only the Animals topic from default file:
+           .\vocabularyquiz.ps1 -Topic Animals
+    
+    3. Use a custom file:
+           .\vocabularyquiz.ps1 -File spanish.txt
+    
+    4. Study multiple topics from custom file in sequential order:
+           .\vocabularyquiz.ps1 -File vocabulary.txt -Topic "Animals Colors Fruits" -Order List
+    
+    5. Study Animals and Colors topics from custom file:
+           .\vocabularyquiz.ps1 -File mywords.txt -Topic "Animals,Colors"
+    
+    6. Display help information:
+           .\vocabularyquiz.ps1 -Help
+    
+    7. Start with specific file and switch to different topic during quiz:
+           .\vocabularyquiz.ps1 -File spanish.txt -Topic Animals
+           > topic Colors
+
+REQUIREMENTS
+    - PowerShell 3.0 or later
+    - A file named "woord.txt" in the current directory
+    - Read access to woord.txt
+
+WORKFLOW
+    1. Script loads and parses the input file
+    2. Words are filtered by topic and sorted by order setting
+    3. Quiz displays a word and waits for Enter key only
+    4. User presses Enter to view the translation
+    5. Translation is displayed
+    6. User can now enter commands (info, topic, order, help, quit) or press Enter to continue
+    7. Next word is selected and displayed
+    8. Repeat steps 3-7 until user quits
+
+NOTES
+    - Topics are case-insensitive (ANIMALS, Animals, and animals are treated the same)
+    - When switching topics, the word index resets to the beginning
+    - When switching to Random order, pairs are reshuffled
+    - When switching to List order, words restart from the beginning of the selected topics
+    - The script displays a word count for the current topic selection
+
+FILES
+    wordlist.txt           Default input file containing word-definition pairs
+    *.txt                  Any text file can be used as input via -File parameter
+    vocabularyquiz.ps1     The main script file
+
+AUTHOR
+    Created for vocabulary study and learning
+
+VERSION
+    1.0
+
+SEE ALSO
+    For more information, run: .\vocabularyquiz.ps1 -Help
